@@ -12,14 +12,15 @@ RUN curl \
  | gunzip \
  | tar x -C /usr/ \
  && ln -s $ZOOKEEPER_HOME /usr/zookeeper \
- && cp $ZOOKEEPER_HOME/conf/zoo_sample.cfg $ZOOKEEPER_HOME/conf/zoo.cfg \
- && mkdir -p /tmp/zookeeper
+ && mkdir -p /data/zookeeper
+
+ADD zoo.cfg /usr/zookeeper/conf/
+ADD start.sh /usr/zookeeper/
 
 EXPOSE 2181 2888 3888
 
 WORKDIR /usr/zookeeper
 
-VOLUME ["/usr/zookeeper/conf", "/tmp/zookeeper"]
+VOLUME ["/usr/zookeeper/conf", "/data/zookeeper"]
 
-ENTRYPOINT ["/usr/zookeeper/bin/zkServer.sh"]
-CMD ["start-foreground"]
+ENTRYPOINT ["/usr/zookeeper/start.sh"]
